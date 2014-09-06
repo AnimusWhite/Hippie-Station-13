@@ -1340,6 +1340,16 @@
 		feedback_inc("admin_cookies_spawned",1)
 		H << "<span class='notice'>Your prayers have been answered!! You received the <b>best cookie</b>!</span>"
 
+	else if(href_list["adminsmite"])
+		if(!check_rights(R_ADMIN|R_FUN))	return
+
+		var/mob/living/M = locate(href_list["adminsmite"])
+		if(!isliving(M))
+			usr << "This can only be used on instances of type /mob/living"
+			return
+
+		usr.client.cmd_smite()
+
 	else if(href_list["BlueSpaceArtillery"])
 		if(!check_rights(R_ADMIN|R_FUN))	return
 
