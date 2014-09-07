@@ -87,6 +87,18 @@
 	name = "\improper Dark Gygax wreckage"
 	icon_state = "darkgygax-broken"
 
+/*
+ * Evangelion Wreckage
+ */
+
+/obj/structure/mecha_wreckage/evangelionunit01
+	name = "\improper EVA Unit 01 wreckage"
+	icon_state = "evangelionunit01-broken"
+
+/*
+ * End Evangelion Wreckage
+ */
+
 /obj/structure/mecha_wreckage/marauder
 	name = "\improper Marauder wreckage"
 	icon_state = "marauder-broken"
