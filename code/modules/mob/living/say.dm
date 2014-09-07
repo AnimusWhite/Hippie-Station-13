@@ -129,7 +129,7 @@ var/list/department_radio_keys = list(
 	var/deaf_message
 	var/deaf_type
 	if(speaker != src)
-		deaf_message = "<span class='name'>[name]</span> talks but you cannot hear them."
+		deaf_message = "<span class='name'>[speaker]</span> talks but you cannot hear them."
 		deaf_type = 1
 	else
 		deaf_message = "<span class='notice'>You can't hear yourself!</span>"
@@ -177,29 +177,29 @@ var/list/department_radio_keys = list(
 
 /mob/living/proc/can_speak_basic(message) //Check BEFORE handling of xeno and ling channels
 	if(!message || message == "")
-		return
+		return 0
 
 	if(client)
 		if(client.prefs.muted & MUTE_IC)
 			src << "<span class='danger'>You cannot speak in IC (muted).</span>"
-			return
+			return 0
 		if(client.handle_spam_prevention(message,MUTE_IC))
-			return
+			return 0
 	
 	return 1
 
 /mob/living/proc/can_speak_vocal(message) //Check AFTER handling of xeno and ling channels
 	if(!message)
-		return
+		return 0
 
 	if(sdisabilities & MUTE)
-		return
-	
+		return 0
+
 	if(is_muzzled())
-		return
-	
+		return 0
+
 	if(!IsVocal())
-		return
+		return 0
 
 	return 1
 
@@ -219,7 +219,7 @@ var/list/department_radio_keys = list(
 		if(lingcheck())
 			log_say("[mind.changeling.changelingID]/[src.key] : [message]")
 			for(var/mob/M in mob_list)
-				if(M.lingcheck() || M.stat == DEAD)
+				if(M.lingcheck() || (M.stat == DEAD && !istype(M, /mob/new_player)))
 					M << "<i><font color=#800080><b>[mind.changeling.changelingID]:</b> [message]</font></i>"
 			return 1
 	return 0
