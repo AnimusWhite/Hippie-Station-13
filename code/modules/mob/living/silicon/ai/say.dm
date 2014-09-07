@@ -42,7 +42,7 @@
 	. = ..()
 	if(.)
 		return .
-	
+
 	if(message_mode == MODE_HOLOPAD)
 		holopad_talk(message)
 		return 1
@@ -137,6 +137,7 @@ var/const/VOX_DELAY = 600
 	announcing_vox = world.time + VOX_DELAY
 
 	log_game("[key_name(src)] made a vocal announcement with the following message: [message].")
+	message_admins("[key_name(src)] made a vocal announcement with the following message: [message].")
 
 	for(var/word in words)
 		play_vox_word(word, src.z, null)

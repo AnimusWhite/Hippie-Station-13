@@ -1510,6 +1510,11 @@ proc/process_ghost_teleport_locs()
 	icon_state = "teleporter"
 	has_gravity = 0
 
+/area/spaceareas/derelict
+	name = "Derelict"
+	icon_state = "red"
+	has_gravity = 0
+
 /area/spaceareas/abandoned_ship/engine
 	name = "Abandoned Ship Engineering"
 	icon_state = "engine"

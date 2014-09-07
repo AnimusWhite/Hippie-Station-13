@@ -1260,6 +1260,7 @@
 #include "code\modules\telesci\telesci_computer.dm"
 #include "code\WorkInProgress\buildmode.dm"
 #include "code\WorkInProgress\explosion_particles.dm"
+#include "code\WorkInProgress\reds\buttes\buttes_and_bots.dm"
 #include "code\WorkInProgress\reds\spesspods\filler.dm"
 #include "interface\interface.dm"
 #include "interface\stylesheet.dm"
