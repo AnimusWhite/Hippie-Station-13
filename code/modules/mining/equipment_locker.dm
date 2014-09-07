@@ -423,7 +423,7 @@
 		J.target = chosen_beacon
 		try_move_adjacent(J)
 		playsound(src,'sound/effects/sparks4.ogg',50,1)
-		src.use_amt = (use_amt - 1)
+		use_amt -= 1
 	else
 		user << "<span class='warning'>The [src.name] is out of uses!</span>"
 		return
