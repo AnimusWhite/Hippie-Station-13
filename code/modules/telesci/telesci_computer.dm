@@ -8,7 +8,7 @@
 	var/temp_msg = "Telescience control console initialized.<BR>Welcome."
 
 	// VARIABLES //
-	var/teles_left	// How many teleports left until it becomes uncalibrated
+	var/teles_left = 0	// How many teleports left until it becomes uncalibrated
 	var/datum/projectile_data/last_tele_data = null
 	var/z_co = 1
 	var/power_off
@@ -174,19 +174,15 @@
 
 	if(prob(25))
 		// light irradiation
-		for(var/obj/machinery/telepad/E in machines)
-			sparks()
-			for(var/mob/living/M in range(rand(6,10),src))
-				M.apply_effect((rand(25, 120)), IRRADIATE, 0)
-				M << "\red You feel a warm sensation."
+		for(var/mob/living/M in range(rand(6,10),src))
+			M.apply_effect((rand(25, 120)), IRRADIATE, 0)
+			M << "\red You feel a warm sensation."
 		return
 	if(prob(10))
 		//war never changes
-		for(var/obj/machinery/telepad/E in machines)
-			sparks()
-			for(var/mob/living/M in range(rand(11,40),src))
-				M.apply_effect((rand(120, 500)), IRRADIATE, 0)
-				M << "\red You feel a wave of heat wash over you."
+		for(var/mob/living/M in range(rand(11,40),src))
+			M.apply_effect((rand(120, 500)), IRRADIATE, 0)
+			M << "\red You feel a wave of heat wash over you."
 
 	/*if(prob(1))
 		// AI CALL SHUTTLE I SAW RUNE, SUPER LOW CHANCE, CAN HARDLY HAPPEN
@@ -210,7 +206,7 @@
 		for(var/mob/living/carbon/O in viewers(src, null))
 			shake_everyone()
 			priority_announce("Unexpected bluespace anomaly detected at [station_name()]. No further information is avalible at this time.", "Telescience Anomaly")
-			spawn_meteors(number = rand(2,50))
+			spawn_meteors(pick((rand(1,10)),(rand(1,30)),(rand(1,50))), pick("meteorsA","meteorsB","meteorsC"))
 			sparks()
 		return
 	if(prob(15))
@@ -221,7 +217,7 @@
 			sparks()
 		return
 	if(prob(20))
-		// HOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONK
+		// i am not removing this
 		for(var/mob/living/M in range(rand(6,30),src))
 			M << sound('sound/items/AirHorn.ogg')
 			if(istype(M, /mob/living/carbon/human))
@@ -240,24 +236,51 @@
 				M.Jitter(500)
 			sparks()
 		return
+	if(prob(15))
+		// ASS BLAST USA
+		for(var/mob/living/carbon/M in range(rand(20,45),src))
+			playsound(src.loc, 'sound/misc/fartmassive.ogg', 60, 1, 5)
+			M.emote("scream")
+			var/obj/item/clothing/head/butt/B = null
+			B = locate() in M.internal_organs
+			if(B)
+				new /obj/item/clothing/head/butt(M.loc)
+				M.internal_organs -= B
+				M.apply_damage(9,"brute","chest")
+				M << "\red Holy shit, a bluespace portal tears your butt off!"
+			if(!B)
+				return
+			return
+	if(prob(5))
+		// the station loses it's shit
+		for(var/mob/living/carbon/M in range(rand(80,200),src))
+			playsound(src.loc, 'sound/misc/fartmassive.ogg', 80, 1, 5)
+			var/obj/item/clothing/head/butt/B = null
+			B = locate() in M.internal_organs
+			if(B)
+				new /obj/item/clothing/head/butt(M.loc)
+				M.internal_organs -= B
+				M << "\red Holy shit, a bluespace portal relocates your butt!"
+				new /obj/item/clothing/head/butt(M.loc = ((M.x + rand(-20,20)) + (M.y + rand(-20,20))))
+			if(!B)
+				return
+			return
 	if(prob(35))
 		// They did the mash! (They did the monster mash!) The monster mash! (It was a graveyard smash!)
 		sparks()
-		for(var/obj/machinery/telepad/E in machines)
-			var/L = get_turf(E)
-			var/blocked = list(/mob/living/simple_animal/hostile,
-				/mob/living/simple_animal/hostile/alien/queen/large,
-				/mob/living/simple_animal/hostile/retaliate,
-				/mob/living/simple_animal/hostile/retaliate/clown,
-				/mob/living/simple_animal/hostile/giant_spider/nurse) // Makes sure certain monsters don't spawn, add your monster to the list if you don't want it to spawn here.
-			var/list/hostiles = typesof(/mob/living/simple_animal/hostile) - blocked
-			playsound(L, 'sound/effects/phasein.ogg', 100, 1)
-			for(var/mob/living/carbon/human/M in viewers(L, null))
-				flick("e_flash", M.flash)
-			var/chosen = pick(hostiles)
-			var/mob/living/simple_animal/hostile/H = new chosen
-			H.loc = L
-			return
+		var/L = get_turf(E)
+		var/blocked = list(/mob/living/simple_animal/hostile,
+			/mob/living/simple_animal/hostile/alien/queen/large,
+			/mob/living/simple_animal/hostile/retaliate,
+			/mob/living/simple_animal/hostile/retaliate/clown,
+			/mob/living/simple_animal/hostile/giant_spider/nurse) // Makes sure certain monsters don't spawn, add your monster to the list if you don't want it to spawn here.
+		var/list/hostiles = typesof(/mob/living/simple_animal/hostile) - blocked
+		playsound(L, 'sound/effects/phasein.ogg', 100, 1)
+		for(var/mob/living/carbon/human/M in viewers(L, null))
+			flick("e_flash", M.flash)
+		var/chosen = pick(hostiles)
+		var/mob/living/simple_animal/hostile/H = new chosen
+		H.loc = L
 		return
 	return
 
@@ -397,20 +420,20 @@
 		telefail()
 		temp_msg = "ERROR!<BR>Elevation is less than 1 or greater than 90."
 		return
-	if(z_co == 2 || z_co < 1)
-		telefail()
-		temp_msg = "ERROR! Sector is less than 1, <BR>or equal to 2."
-		return
 	for(var/obj/effect/landmark/L in landmarks_list)
 		if (L.name == "awaystart")
 			if((z_co == L.z && trueX == L.x && trueY == L.y) && (teles_left > 0))
 				doteleport(user)
-		else if(teles_left > 0)
-			doteleport(user)
-		else
-			telefail()
-			temp_msg = "ERROR!<BR>Calibration required."
-			return
+			else if(z_co == 2 || z_co < 1 || z_co >= 18) //HAHA THIS IS HOW YOU DO IT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				telefail()
+				temp_msg = "ERROR! Sector is less than 1, <BR>or equal to 2."
+				return
+			else if(teles_left > 0)
+				doteleport(user)
+			else
+				telefail()
+				temp_msg = "ERROR!<BR>Calibration required."
+				return
 	return
 
 /obj/machinery/computer/telescience/proc/eject()
@@ -485,7 +508,7 @@
 	updateDialog()
 
 /obj/machinery/computer/telescience/proc/recalibrate()
-	teles_left = rand(30, 40)
+	teles_left = rand(8, 50)
 	//angle_off = rand(-25, 25)
 	power_off = rand(-4, 0)
 	rotation_off = rand(-10, 10)

@@ -48,6 +48,10 @@
 	item_state = "butt"
 	throwforce = 5
 	force = 5
+	var/subjectname = ""
+	var/subjectjob = null
+	var/hname = ""
+	var/job = null
 
 /obj/item/clothing/head/butt/attackby(var/obj/item/W, mob/user as mob) // copypasting bot manufucturing process, im a lazy fuck
 
@@ -58,4 +62,31 @@
 		new /obj/machinery/bot/buttbot(T)
 		user << "<span class='notice'>You add the robot arm to the butt and... What?</span>"
 		user.drop_item(src)
-		del(src)
+		qdel(src)
+
+
+
+
+/datum/recipe/butt
+	make(var/obj/container as obj)
+		var/human_name //these should work for ANYTHING
+		var/human_job
+		for (var/obj/item/clothing/head/butt/B in container)
+			if (!B.subjectname)
+				continue
+			human_name = B.subjectname
+			human_job = B.subjectjob
+			break
+		var/lastname_index = findtext(human_name, " ")
+		if (lastname_index)
+			human_name = copytext(human_name,lastname_index+1)
+
+		var/obj/item/clothing/head/butt/BB = ..(container)
+		BB.name = human_name+BB.name
+		BB.job = human_job
+		return BB
+
+	items = list(
+		/obj/item/clothing/head/butt
+	)
+	result = /obj/item/clothing/head/butt //does this matter in some way ? ? ?

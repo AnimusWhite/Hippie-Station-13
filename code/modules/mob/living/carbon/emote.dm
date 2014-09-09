@@ -170,7 +170,9 @@
 				..(act)
 
 		if ("fart")// you get the idea, working out the syntax for how to add more fart messages is a nobrainer (dont be retarded)
-			if(!src.butt)
+			var/obj/item/clothing/head/butt/B = null
+			B = locate() in src.internal_organs
+			if(!B)
 				src << "\red You don't have a butt!"
 				return
 			for(var/mob/M in range(0))
@@ -189,10 +191,12 @@
 			"is a <b>farting</b> motherfucker!",
 			"<B><font color='red'>f</font><font color='blue'>a</font><font color='red'>r</font><font color='blue'>t</font><font color='red'>s</font></B>")]"
 			playsound(src.loc, 'sound/misc/fart.ogg', 50, 1, 5)
-			if(prob(15))
-				new /obj/item/clothing/head/butt(src.loc)
-				new /obj/effect/decal/cleanable/blood(src.loc)
-				src.butt = null
+			if(prob(12))
+				B = locate() in src.internal_organs
+				if(B)
+					src.internal_organs -= B
+					new /obj/item/clothing/head/butt(src.loc)
+					new /obj/effect/decal/cleanable/blood(src.loc)
 				for(var/mob/M in range(0))
 					if(M != src)
 						visible_message("\red <b>[src]</b>'s ass hits <b>[M]</b> in the face!", "\red Your ass smacks <b>[M]</b> in the face!")
@@ -202,11 +206,13 @@
 //		if ("poo") //lolno
 
 		if("superfart") //how to remove ass
-			if(!src.butt)
+			var/obj/item/clothing/head/butt/B = null
+			B = locate() in src.internal_organs
+			if(!B)
 				src << "\red You don't have a butt!"
 				return
 			//src.butt = null
-			src.nutrition -= 250
+			src.nutrition -= 500
 			playsound(src.loc, 'sound/misc/fart.ogg', 50, 1, 5)
 			spawn(1)
 				playsound(src.loc, 'sound/misc/fart.ogg', 50, 1, 5)
@@ -228,10 +234,12 @@
 												playsound(src.loc, 'sound/misc/fart.ogg', 50, 1, 5)
 												spawn(5)
 													playsound(src.loc, 'sound/misc/fartmassive.ogg', 75, 1, 5)
-													new /obj/item/clothing/head/butt(src.loc)
-													new /obj/effect/decal/cleanable/blood(src.loc)
-													src.butt = null
-													if(prob(34))
+													B = locate() in src.internal_organs
+													if(B)
+														src.internal_organs -= B
+														new /obj/item/clothing/head/butt(src.loc)
+														new /obj/effect/decal/cleanable/blood(src.loc)
+													if(prob(76))
 														for(var/mob/M in range(0))
 															if(M != src)
 																visible_message("\red <b>[src]</b>'s ass blasts <b>[M]</b> in the face!", "\red You ass blast <b>[M]</b>!")
@@ -239,7 +247,7 @@
 															else
 																continue
 														visible_message("\red <b>[src]</b> blows their ass off!", "\red Holy shit, your butt flies off in an arc!")
-													if(prob(33))
+													else if(prob(12))
 														var/startx = 0
 														var/starty = 0
 														var/endy = 0
@@ -272,7 +280,8 @@
 														visible_message("\red <b>[src]</b> blows their ass off with such force, they explode!", "\red Holy shit, your butt flies off into the galaxy!")
 														usr.gib() //can you belive I forgot to put this here?? yeah you need to see the message BEFORE you gib
 														new /obj/effect/immovablerod/butt(locate(startx, starty, 1), locate(endx, endy, 1))
-													if(prob(33))
+														priority_announce("What the fuck was that?!", "General Alert")
+													else if(prob(12))
 														visible_message("\red <b>[src]</b> rips their ass apart in a massive explosion!", "\red Holy shit, your butt goes supernova!")
 														explosion(src.loc,0,1,3,adminlog = 0,flame_range = 3)
 														usr.gib()
