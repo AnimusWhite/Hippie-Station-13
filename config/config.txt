@@ -156,3 +156,8 @@ TICKCOMP 0
 
 ## Communication key for receiving data through world/Topic(), you don't want to give this out
 #COMMS_KEY default_pwd
+
+## Location of byond achievement hub (EX: exampleusername.medalhubexample)
+#ACHIEVEMENT_HUB
+## Password for hub
+#ACHIEVEMENT_PASSWORD 
