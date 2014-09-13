@@ -144,7 +144,7 @@
 var/list/ghost_forms = list("ghost","ghostking","ghostian2","ghost_red","ghost_black", \
 							"ghost_blue","ghost_yellow","ghost_green","ghost_pink", \
 							"ghost_cyan","ghost_dblue","ghost_dred","ghost_dgreen", \
-							"ghost_dcyan","ghost_grey","ghost_dyellow","ghost_dpink"."ghost_rainbow","ghost_singulo")
+							"ghost_dcyan","ghost_grey","ghost_dyellow","ghost_dpink","ghost_rainbow","ghost_singulo")
 /client/verb/pick_form()
 	set name = "Choose Ghost Form"
 	set category = "Preferences"
