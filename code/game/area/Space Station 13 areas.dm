@@ -20,6 +20,11 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/atmosalm = 0
 	var/poweralm = 1
 	var/party = null
+	var/alert = null
+	var/danger = null
+	var/caution = null
+	var/warn = null
+	var/rads = null
 	level = null
 	name = "Space"
 	icon = 'icons/turf/areas.dmi'
@@ -293,6 +298,17 @@ proc/process_ghost_teleport_locs()
 
 /area/shuttle/thunderdome
 	name = "honk"
+
+/area/shuttle/wizardcruiser
+	name = "\improper Wizard Ship"
+
+/area/shuttle/wizardcruiser/stationary
+	icon_state = "shuttle2"
+	destination = /area/shuttle/wizardcruiser/traveling
+
+/area/shuttle/wizardcruiser/traveling
+	icon_state = "shuttle"
+	destination = /area/shuttle/wizardcruiser/stationary
 
 /area/start            // will be unused once kurper gets his login interface patch done
 	name = "start area"

@@ -353,6 +353,9 @@
 	var/atom/cur_target = null
 	var/scan_range = 9 //You will never see them coming
 	var/health = 200 //Because it lacks a cover, and is mostly to keep people from touching the syndie shuttle.
+	var/firemode = 1 //1 = single shot, 2 = BXR, 3 = DAKKA DAKKA
+	var/total_mag = 30 //set this number to whatever you want current ammo to be set to when it runs out
+	var/current_ammo = 0 //how much to shoot before a pause! get e-fukt if DAKKA DAKKA
 	icon = 'icons/obj/turrets.dmi'
 	icon_state = "syndieturret0"
 
@@ -395,6 +398,19 @@
 	update_icon()
 	return
 
+/obj/machinery/gun_turret/proc/reload_ammo() //also checks ammo but hey
+	if(current_ammo > total_mag) //we do not want there to be more ammo than it can actually hold
+		playsound(src, 'sound/weapons/smg_empty_alarm.ogg', 50, 1)
+		spawn(70)
+			current_ammo = total_mag
+			return
+	if(current_ammo <= total_mag && current_ammo > 0) //it fits within the bounds we've set
+		return //stop wasting my time. stop it
+	else //have problems with this???? see a doctor
+		playsound(src, 'sound/weapons/smg_empty_alarm.ogg', 50, 1)
+		spawn(70)
+			current_ammo = total_mag
+	return
 
 /obj/machinery/gun_turret/bullet_act(var/obj/item/projectile/Proj)
 	take_damage(Proj.damage)
@@ -468,6 +484,10 @@
 	if(!target)
 		cur_target = null
 		return
+	if(current_ammo == 0) //what is "i need ammo to fire" for 400
+		reload_ammo()
+		cur_target = null
+		return
 	src.dir = get_dir(src,target)
 	var/turf/targloc = get_turf(target)
 	if(!src)
@@ -477,11 +497,53 @@
 		return
 	if (targloc == curloc)
 		return
-	playsound(src, 'sound/weapons/Gunshot.ogg', 50, 1)
 	var/obj/item/projectile/A = new /obj/item/projectile/bullet(curloc)
-	A.current = curloc
-	A.yo = targloc.y - curloc.y
-	A.xo = targloc.x - curloc.x
+	if(firemode == 1)
+		playsound(src, 'sound/weapons/Gunshot.ogg', 50, 1)
+		A.current = curloc
+		A.yo = targloc.y - curloc.y
+		A.xo = targloc.x - curloc.x
+		if(current_ammo == 0)
+			reload_ammo()
+	if(firemode == 2)
+		playsound(src, 'sound/weapons/Gunshot.ogg', 50, 1)
+		A.current = curloc
+		A.yo = targloc.y - curloc.y
+		A.xo = targloc.x - curloc.x
+		if(current_ammo == 0)
+			reload_ammo()
+			A.process()
+			return
+		spawn(12)
+			playsound(src, 'sound/weapons/Gunshot.ogg', 50, 1)
+			A.current = curloc
+			A.yo = targloc.y - curloc.y
+			A.xo = targloc.x - curloc.x
+			if(current_ammo == 0)
+				reload_ammo()
+				A.process()
+				return
+			spawn(12)
+				playsound(src, 'sound/weapons/Gunshot.ogg', 50, 1)
+				A.current = curloc
+				A.yo = targloc.y - curloc.y
+				A.xo = targloc.x - curloc.x
+				if(current_ammo == 0)
+					reload_ammo()
+					A.process()
+					return
+	if(firemode == 3)
+		do
+			playsound(src, 'sound/weapons/Gunshot.ogg', 50, 1)
+			A.current = curloc
+			A.yo = targloc.y - curloc.y
+			A.xo = targloc.x - curloc.x
+			current_ammo -= 1
+			spawn(0)
+				A.process()
+			spawn(4)
+				continue
+		while(current_ammo > 0)
 	spawn(0)
 		A.process()
 	return
@@ -491,7 +553,7 @@
 //Turret Control Panel//
 ////////////////////////
 
-/obj/machinery/turretid
+/obj/machinery/areaturretid
 	name = "turret control panel"
 	desc = "Used to control a room's automated defenses."
 	icon = 'icons/obj/machines/turret_control.dmi'
@@ -505,7 +567,7 @@
 	var/ailock = 0 // AI cannot use this
 	req_access = list(access_ai_upload)
 
-/obj/machinery/turretid/New()
+/obj/machinery/areaturretid/New()
 	..()
 	if(!control_area)
 		var/area/CA = get_area(src)
@@ -522,7 +584,7 @@
 	//don't have to check if control_area is path, since get_area_all_atoms can take path.
 	return
 
-/obj/machinery/turretid/attackby(obj/item/weapon/W, mob/user)
+/obj/machinery/areaturretid/attackby(obj/item/weapon/W, mob/user)
 	if(stat & BROKEN) return
 	if (istype(user, /mob/living/silicon))
 		return src.attack_hand(user)
@@ -547,25 +609,25 @@
 			if (locked)
 				if (user.machine==src)
 					user.unset_machine()
-					user << browse(null, "window=turretid")
+					user << browse(null, "window=areaturretid")
 			else
 				if (user.machine==src)
 					src.attack_hand(user)
 		else
 			user << "<span class='warning'>Access denied.</span>"
 
-/obj/machinery/turretid/attack_ai(mob/user as mob)
+/obj/machinery/areaturretid/attack_ai(mob/user as mob)
 	if(!ailock)
 		return attack_hand(user)
 	else
 		user << "<span class='notice'>There seems to be a firewall preventing you from accessing this device.</span>"
 
-/obj/machinery/turretid/attack_hand(mob/user as mob)
+/obj/machinery/areaturretid/attack_hand(mob/user as mob)
 	if ( get_dist(src, user) > 0 )
 		if ( !issilicon(user) )
 			user << "<span class='notice'>You are too far away.</span>"
 			user.unset_machine()
-			user << browse(null, "window=turretid")
+			user << browse(null, "window=areaturretid")
 			return
 
 	user.set_machine(src)
@@ -586,14 +648,14 @@
 		t += text("Turrets [] - <A href='?src=\ref[];toggleOn=1'>[]?</a><br>\n", src.enabled?"activated":"deactivated", src, src.enabled?"Disable":"Enable")
 		t += text("Currently set for [] - <A href='?src=\ref[];toggleLethal=1'>Change to []?</a><br>\n", src.lethal?"lethal":"stun repeatedly", src,  src.lethal?"Stun repeatedly":"Lethal")
 
-	//user << browse(t, "window=turretid")
-	//onclose(user, "turretid")
-	var/datum/browser/popup = new(user, "turretid", "Turret Control Panel ([area.name])")
+	//user << browse(t, "window=areaturretid")
+	//onclose(user, "areaturretid")
+	var/datum/browser/popup = new(user, "areaturretid", "Turret Control Panel ([area.name])")
 	popup.set_content(t)
 	popup.set_title_image(user.browse_rsc_icon(src.icon, src.icon_state))
 	popup.open()
 
-/obj/machinery/turretid/Topic(href, href_list)
+/obj/machinery/areaturretid/Topic(href, href_list)
 	if(..())
 		return
 	if (src.locked)
@@ -608,17 +670,17 @@
 		src.updateTurrets()
 	src.attack_hand(usr)
 
-/obj/machinery/turretid/proc/updateTurrets()
+/obj/machinery/areaturretid/proc/updateTurrets()
 	if(control_area)
 		for (var/obj/machinery/turret/aTurret in get_area_all_atoms(control_area))
 			aTurret.setState(enabled, lethal)
 	src.update_icon()
 
-/obj/machinery/turretid/power_change()
+/obj/machinery/areaturretid/power_change()
 	..()
 	update_icon()
 
-/obj/machinery/turretid/update_icon()
+/obj/machinery/areaturretid/update_icon()
 	..()
 	if(stat & NOPOWER)
 		icon_state = "control_off"

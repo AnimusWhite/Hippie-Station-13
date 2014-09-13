@@ -32,7 +32,7 @@
 		if(DEPARTMENT_RESUPPLY)
 			priority_announce("Seems we've ordered doubles of our department resupply packages this month. Can we send them to you?","Centcom Supply Department")
 			thanks_msg = "The shuttle will be returned in 5 minutes."
-			bonus_points = 0
+			bonus_points = 20
 
 /datum/round_event/shuttle_loan/proc/loan_shuttle()
 	priority_announce(thanks_msg, "Cargo shuttle commandeered by Centcom.")
