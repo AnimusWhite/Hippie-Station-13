@@ -157,7 +157,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	set name = "Teleport"
 	set desc= "Teleport to a location"
 	if(!istype(usr, /mob/dead/observer))
-		usr << "Not when you're not dead!"
+		usr << "you have to be dead first, dumbass"
 		return
 	usr.verbs -= /mob/dead/observer/proc/dead_tele
 	spawn(30)
