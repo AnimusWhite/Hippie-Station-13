@@ -764,6 +764,10 @@ proc/process_ghost_teleport_locs()
 	name = "\improper Kitchen"
 	icon_state = "kitchen"
 
+/area/crew_quarters/fatbears
+	name = "\improper Fatbear's Pizza"
+	icon_state = "fatbear"
+
 /area/crew_quarters/bar
 	name = "\improper Bar"
 	icon_state = "bar"
