@@ -359,7 +359,7 @@
 	ready_dna(new_character, client.prefs.blood_type)
 
 	new_character.key = key		//Manually transfer the key to log them in
-
+	new_character.startofsomething()
 	return new_character
 
 
