@@ -47,7 +47,7 @@ To use any medals in this code; the medal needs to be setup on your hub.
 		return
 
 	spawn ()
-		var/result = world.SetMedal(title, src.key, config.achievement_hub, config.achievement_password)
+		var/result = world.SetMedal("The Start of Something", src.key, config.achievement_hub, config.achievement_password)
 
 		if(result == 1)
 			if(announce)
