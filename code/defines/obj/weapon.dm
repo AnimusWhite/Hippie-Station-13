@@ -574,3 +574,7 @@
 	icon_state = "capacitor"
 	desc = "A debug item for research."
 	origin_tech = "materials=8;programming=8;magnets=8;powerstorage=8;bluespace=8;combat=8;biotech=8;syndicate=8"
+
+/obj/item/weapon/research/mini
+	desc = "Deconstruct this."
+	origin_tech = "materials=4;programming=4;magnets=4;powerstorage=4;bluespace=4;combat=2;biotech=2;syndicate=2"
