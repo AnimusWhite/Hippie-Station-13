@@ -34,29 +34,6 @@ To use any medals in this code; the medal needs to be setup on your hub.
 			src << "\red You would have earned the \[[title]] achievement, but there was an error communicating with the BYOND hub."
 	return
 
-/mob/proc/startofsomething(title, announce = 1)
-	if(!title)
-		return
-	if(!src.client || !src.key)
-		return
-	if(IsGuestKey(src.key))
-		return
-	if(!config)
-		return
-	if(!config.achievement_hub || !config.achievement_password)
-		return
-
-	spawn ()
-		var/result = world.SetMedal(title, src.key, config.achievement_hub, config.achievement_password)
-
-		if(result == 1)
-			if(announce)
-				world << "<span class=notice>[key] earned the [title] achievement.</span>"
-				achivements_unlocked += 1
-				src << "<span class=notice>Welcome to [config.server_name]. Please read the rules!</span>"
-		else if(isnull(result) && ismob(src) && src.client)
-			src << "\red You would have earned the \[[title]] achievement, but there was an error communicating with the BYOND hub."
-	return
 
 
 
