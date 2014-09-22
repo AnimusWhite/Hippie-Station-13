@@ -5,13 +5,10 @@
 	name = "wizard"
 	config_tag = "wizard"
 	antag_flag = BE_WIZARD
-	required_players = 18
+	required_players = 20
 	required_enemies = 1
 	recommended_enemies = 1
 	pre_setup_before_jobs = 1
-
-	uplink_welcome = "Wizardly Uplink Console:"
-	uplink_uses = 10
 
 	var/finished = 0
 
