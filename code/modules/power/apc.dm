@@ -772,7 +772,9 @@
 		return 0
 	if(!user.client)
 		return 0
-	if(!user.IsAdvancedToolUser())
+	if ( ! (istype(user, /mob/living/carbon/human) || \
+			istype(user, /mob/living/silicon) || \
+			istype(user, /mob/living/carbon/monkey)) )
 		user << "<span class='danger'>You don't have the dexterity to use this [src]!</span>"
 		return 0
 	if(user.restrained())

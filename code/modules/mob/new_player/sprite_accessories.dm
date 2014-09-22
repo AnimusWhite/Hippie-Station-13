@@ -74,7 +74,7 @@
 
 /datum/sprite_accessory/hair/over_eye
 	name = "Over Eye"
-	icon_state = "hair_shortovereye"
+	icon_state = "hair_overeye"
 
 /datum/sprite_accessory/hair/long_over_eye
 	name = "Long Over Eye"

@@ -21,11 +21,13 @@ Pipelines + Other Objects -> Pipe network
 
 
 /obj/machinery/atmospherics/var/initialize_directions = 0
-/obj/machinery/atmospherics/var/pipe_color/
-/*
+/obj/machinery/atmospherics/var/pipe_color
+
 /obj/machinery/atmospherics/process()
-	//build_network()
-*/
+	if(gc_destroyed) //comments on /vg/ imply that GC'd pipes still process
+		return PROCESS_KILL
+	build_network()
+
 /obj/machinery/atmospherics/proc/network_expand(datum/pipe_network/new_network, obj/machinery/atmospherics/pipe/reference)
 	// Check to see if should be added to network. Add self if so and adjust variables appropriately.
 	// Note don't forget to have neighbors look as well!
@@ -87,6 +89,3 @@ Pipelines + Other Objects -> Pipe network
 			qdel(src)
 	else
 		return ..()
-
-/obj/machinery/atmospherics/proc/nullifyPipenetwork()
-	return

@@ -22,7 +22,6 @@ BONUS
 	stage_speed = -1
 	transmittable = 2
 	level = 4
-	severity = 1
 
 /datum/symptom/shedding/Activate(var/datum/disease/advance/A)
 	..()

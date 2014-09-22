@@ -18,14 +18,9 @@
 		//If we mostly took damage from fire
 		if(fireloss > 125)
 			icon_state = "alien[caste]_husked"
-			pixel_y = 0
 		else
 			icon_state = "alien[caste]_dead"
-			pixel_y = 0
-	else if(stat == UNCONSCIOUS)
-		icon_state = "alien[caste]_unconscious"
-		pixel_y = 0
-	else if(lying || resting)
+	else if(stat == UNCONSCIOUS || lying || resting)
 		icon_state = "alien[caste]_sleep"
 	else if(m_intent == "run")
 		icon_state = "alien[caste]_running"

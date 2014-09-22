@@ -25,7 +25,9 @@
 		user << "<span class='danger'>\The [src] cannot be applied to [M]!</span>"
 		return 1
 
-	if(!user.IsAdvancedToolUser())
+	if ( ! (istype(user, /mob/living/carbon/human) || \
+			istype(user, /mob/living/silicon) || \
+			istype(user, /mob/living/carbon/monkey)) )
 		user << "<span class='danger'>You don't have the dexterity to do this!</span>"
 		return 1
 

@@ -10,7 +10,6 @@
 	affected_species = list("Human")
 	curable = 0
 	permeability_mod = 1
-	severity = "BIOHAZARD THREAT!"
 
 /datum/disease/gbs/stage_act()
 	..()

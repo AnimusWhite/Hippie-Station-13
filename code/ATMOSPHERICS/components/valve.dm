@@ -11,7 +11,7 @@
 	can_unwrench = 1
 
 	var/open = 0
-	var/openDuringInit //useless, must remove
+	var/openDuringInit = 0
 
 	var/obj/machinery/atmospherics/node1
 	var/obj/machinery/atmospherics/node2
@@ -178,7 +178,12 @@ obj/machinery/atmospherics/valve/attack_hand(mob/user as mob)
 			node2 = target
 			break
 
-	//build_network()
+	build_network()
+
+	if(openDuringInit)
+		close()
+		open()
+		openDuringInit = 0
 
 /*
 	var/connect_directions
@@ -304,7 +309,3 @@ obj/machinery/atmospherics/valve/attack_hand(mob/user as mob)
 				close()
 			else
 				open()
-
-/obj/machinery/atmospherics/valve/nullifyPipenetwork()
-	network_node1 = null
-	network_node2 = null
