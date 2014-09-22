@@ -16,10 +16,6 @@
 
 	. = src.say_dead(message)
 
-/mob/dead/observer/whisper(message as text)
-	src << "<span class='danger'>WHAT THE <font size='10'>FUCK</font> ARE YOU DOING</span>"
-	return
-
 /mob/dead/observer/Hear(message, atom/movable/speaker, message_langs, raw_message, radio_freq)
 	src << message
 

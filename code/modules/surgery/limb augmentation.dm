@@ -17,7 +17,7 @@
 	implements = list(/obj/item/robot_parts = 100)
 	time = 32
 	var/obj/item/organ/limb/L = null // L because "limb"
-	allowed_organs = list("r_arm","l_arm","r_leg","l_leg","chest","butt","head")
+	allowed_organs = list("r_arm","l_arm","r_leg","l_leg","chest","head")
 
 
 
