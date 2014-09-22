@@ -760,7 +760,7 @@
 					ticker.mode.changelings += src
 					current.make_changeling()
 					special_role = "Changeling"
-					current << "<span class='userdanger'>Your powers are awoken. A flash of memory returns to us...we are a changeling!</span>"
+					current << "<span class='userdanger'>Your powers are awoken. A flash of memory returns to us...we are [changeling.changelingID], a changeling!</span>"
 					message_admins("[key_name_admin(usr)] has changeling'ed [current].")
 					log_admin("[key_name(usr)] has changeling'ed [current].")
 			if("autoobjectives")
@@ -1017,6 +1017,10 @@
 		qdel(H.w_uniform)
 
 		ticker.mode.equip_syndicate(current)
+
+		if (nuke_code)
+			store_memory("<B>Syndicate Nuclear Bomb Code</B>: [nuke_code]", 0, 0)
+			current << "The nuclear authorization code is: <B>[nuke_code]</B>"
 
 		if (leader)
 			ticker.mode.prepare_syndicate_leader(src,nuke_code)
