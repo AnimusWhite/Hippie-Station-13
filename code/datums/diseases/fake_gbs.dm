@@ -8,7 +8,7 @@
 	agent = "Gravitokinetic Bipotential SADS-"
 	affected_species = list("Human", "Monkey")
 	desc = "If left untreated death will occur."
-	severity = "BIOHAZARD THREAT!"
+	severity = "Major"
 
 /datum/disease/fake_gbs/stage_act()
 	..()

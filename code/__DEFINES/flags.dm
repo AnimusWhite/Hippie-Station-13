@@ -49,7 +49,6 @@
 #define PASSGLASS	2
 #define PASSGRILLE	4
 #define PASSBLOB	8
-#define PASSMOB		16
 
 //flags for species
 
@@ -75,4 +74,3 @@
 #define ALIEN 4
 #define ROBOT 8
 #define SLIME 16
-#define DRONE 32

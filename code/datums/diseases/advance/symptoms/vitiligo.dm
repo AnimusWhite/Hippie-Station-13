@@ -22,7 +22,6 @@ BONUS
 	stage_speed = -1
 	transmittable = -2
 	level = 5
-	severity = 1
 
 /datum/symptom/vitiligo/Activate(var/datum/disease/advance/A)
 	..()

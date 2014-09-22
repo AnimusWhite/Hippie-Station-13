@@ -42,7 +42,7 @@
 		return
 
 /obj/item/weapon/dnainjector/attack(mob/target, mob/user)
-	if(!user.IsAdvancedToolUser())
+	if(!ishuman(user))
 		user << "<span class='notice'>You don't have the dexterity to do this!</span>"
 		return
 	add_logs(user, target, "attempted to inject", object="[name]")

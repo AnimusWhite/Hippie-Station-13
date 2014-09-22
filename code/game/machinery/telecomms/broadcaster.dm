@@ -557,3 +557,4 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	sleep(rand(10,25))
 
 	return signal
+

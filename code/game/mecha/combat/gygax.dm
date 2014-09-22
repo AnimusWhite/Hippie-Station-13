@@ -16,6 +16,27 @@
 	max_equip = 3
 	step_energy_drain = 3
 
+/*
+ * Evangelions
+ */
+
+/obj/mecha/combat/gygax/evangelionunit01
+	desc = "Large biomechanical weapon, the Evangelion. This one is purple and designated as Unit-01"
+	name = "\improper EVA Unit 01"
+	icon_state = "evangelionunit01"
+	health = 300
+	deflect_chance = 15
+	damage_absorption = list("brute"=0.6,"fire"=0.8,"bullet"=0.6,"laser"=0.5,"energy"=0.65,"bomb"=0.8)
+	max_temperature = 35000
+	overload_coeff = 1
+	wreckage = /obj/structure/mecha_wreckage/evangelionunit01
+	internal_damage_threshold = 35
+	max_equip = 4
+
+/*
+ * Dark Gygax
+ */
+
 /obj/mecha/combat/gygax/dark
 	desc = "A lightweight exosuit, painted in a dark scheme. This model appears to have some modifications."
 	name = "\improper Dark Gygax"
