@@ -11,3 +11,6 @@
 *.lk
 *.int
 /data/mode.txt
+*.html
+data/ban_unban_log.txt
+data/consistent.ini
