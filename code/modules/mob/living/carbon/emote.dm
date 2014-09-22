@@ -204,7 +204,7 @@
 				visible_message("\red <b>[src]</b> blows their ass off!", "\red Holy shit, your butt flies off in an arc!")
 
 //		if ("poo") //lolno
-
+/*THIS COULD BE DONE BETTER
 		if("superfart") //how to remove ass
 			var/obj/item/clothing/head/butt/B = null
 			B = locate() in src.internal_organs
@@ -285,7 +285,7 @@
 														visible_message("\red <b>[src]</b> rips their ass apart in a massive explosion!", "\red Holy shit, your butt goes supernova!")
 														explosion(src.loc,0,1,3,adminlog = 0,flame_range = 3)
 														usr.gib()
-
+*/
 
 		if ("help")
 			src << "Help for emotes. You can use these emotes with say \"*emote\":\n\naflap, airguitar, blink, blink_r, blush, bow-(none)/mob, burp, choke, chuckle, clap, collapse, cough, dance, deathgasp, drool, fart, flap, frown, gasp, giggle, glare-(none)/mob, grin, jump, laugh, look, me, nod, point-atom, scream, shake, sigh, sit, smile, sneeze, sniff, snore, stare-(none)/mob, sulk, sway, tremble, twitch, twitch_s, wave, whimper, wink, yawn"

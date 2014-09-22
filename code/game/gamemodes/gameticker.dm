@@ -198,6 +198,11 @@ var/round_start_time = 0
 					world << sound('sound/effects/explosionfar.ogg')
 					flick("station_intact_fade_red",cinematic)
 					cinematic.icon_state = "summary_nukefail"
+				if("fake") //The round isn't over, we're just freaking people out for fun
+					flick("intro_nuke",cinematic)
+					sleep(35)
+					world << sound('sound/items/bikehorn.ogg')
+					flick("summary_selfdes",cinematic)
 				else
 					flick("intro_nuke",cinematic)
 					sleep(35)
@@ -310,9 +315,6 @@ var/round_start_time = 0
 				blackbox.save_all_data_to_sql()
 
 			if(!delay_end)
-				var/F = file("data/consistent.ini")//Because of how this works, it can't be done until after the shuttle docks
-				fdel(F)
-				F << vouchers
 				sleep(restart_timeout)
 				kick_clients_in_lobby("\red The round came to an end with you in the lobby.", 1) //second parameter ensures only afk clients are kicked
 				world.Reboot()
@@ -328,7 +330,6 @@ var/round_start_time = 0
 
 
 /datum/controller/gameticker/proc/declare_completion()
-	vouchers += 1
 	var/station_evacuated
 	if(emergency_shuttle.location > 0)
 		station_evacuated = 1

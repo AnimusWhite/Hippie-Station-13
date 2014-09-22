@@ -3,7 +3,7 @@
 
 /obj/machinery/mineral/ore_redemption
 	name = "ore redemption machine"
-	desc = "A machine that accepts ore from inside a ore crate and instantly transforms it into workable material sheets. Points for ore are generated based on type and can be redeemed at a mining equipment vendor."
+	desc = "A machine that accepts ore and instantly transforms it into workable material sheets. Points for ore are generated based on type and can be redeemed at a mining equipment vendor."
 	icon = 'icons/obj/machines/mining_machines.dmi'
 	icon_state = "ore_redemption"
 	density = 1
@@ -392,7 +392,7 @@
 
 /obj/item/device/wormhole_jaunter
 	name = "wormhole jaunter"
-	desc = "A device harnessing outdated wormhole technology, Nanotrasen has since turned its eyes to blue space for more accurate teleportation. The wormholes it creates are unpleasant to travel through, to say the least."
+	desc = "A single use device harnessing outdated wormhole technology, Nanotrasen has since turned its eyes to blue space for more accurate teleportation. The wormholes it creates are unpleasant to travel through, to say the least."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "Jaunter"
 	item_state = "electronic"
@@ -401,14 +401,13 @@
 	throw_speed = 3
 	throw_range = 5
 	origin_tech = "bluespace=2"
-	var/use_amt = 1 //change this per object for MANY USES.
 
 /obj/item/device/wormhole_jaunter/attack_self(mob/user as mob)
 	var/turf/device_turf = get_turf(user)
-	if(!device_turf||device_turf.z==2||device_turf.z>=99999999) //limiting things to a few zlevels is FUCKING ANNOYING STOP IT YOU CUNTS
+	if(!device_turf||device_turf.z==2||device_turf.z>=7)
 		user << "<span class='notice'>You're having difficulties getting the [src.name] to work.</span>"
 		return
-	else if(use_amt > 0)
+	else
 		user.visible_message("<span class='notice'>[user.name] activates the [src.name]!</span>")
 		var/list/L = list()
 		for(var/obj/item/device/radio/beacon/B in world)
@@ -423,19 +422,7 @@
 		J.target = chosen_beacon
 		try_move_adjacent(J)
 		playsound(src,'sound/effects/sparks4.ogg',50,1)
-		use_amt -= 1
-	else
-		user << "<span class='warning'>The [src.name] is out of uses!</span>"
-		return
-
-/obj/item/device/wormhole_jaunter/examine()
-	..()
-	if(use_amt > 1)
-		usr << "<span class='notice'>There are [use_amt] charges left. </span>"
-	else if(use_amt == 1)
-		usr << "<span class='notice'>There is one charge left. </span>"
-	else
-		usr << "<span class='notice'>There are no charges left. </span>"
+		qdel(src)
 
 /obj/effect/portal/wormhole/jaunt_tunnel
 	name = "jaunt tunnel"
@@ -604,7 +591,7 @@
 				health += 10
 				user << "<span class='info'>You repair some of the armor on [src].</span>"
 			return
-	if(istype(I, /obj/item/device/mining_scanner))
+	if(istype(I, /obj/item/device/t_scanner/mining_scanner))
 		user << "<span class='info'>You instruct [src] to drop any collected ore.</span>"
 		DropOre()
 		return
@@ -738,45 +725,46 @@
 		usr << "<span class='info'>The display on [src] seems to be flickering.</span>"
 
 /**********************Mining Scanner**********************/
-/obj/item/device/mining_scanner
+/obj/item/device/t_scanner/mining_scanner
 	desc = "A scanner that checks surrounding rock for useful minerals, it can also be used to stop gibtonite detonations. Requires you to wear mesons to work properly."
 	name = "mining scanner"
-	icon_state = "mining"
+	icon_state = "mining0"
 	item_state = "analyzer"
 	w_class = 2.0
 	flags = CONDUCT
 	slot_flags = SLOT_BELT
 	var/cooldown = 0
 
-/obj/item/device/mining_scanner/attack_self(mob/user)
-	if(!user.client)
-		return
+/obj/item/device/t_scanner/mining_scanner/scan()
 	if(!cooldown)
 		cooldown = 1
-		spawn(40)
+		spawn(100)
 			cooldown = 0
-		var/client/C = user.client
+		var/turf/t = get_turf(src)
+		var/list/mobs = recursive_mob_check(t, 1,0,0)
+		if(!mobs.len)
+			return
 		var/list/L = list()
 		var/turf/simulated/mineral/M
-		for(M in range(7, user))
+		for(M in range(7, t))
 			if(M.scan_state)
 				L += M
-		if(!L.len)
-			user << "<span class='info'>[src] reports that nothing was detected nearby.</span>"
-			return
-		else
-			for(M in L)
-				var/turf/T = get_turf(M)
-				var/image/I = image('icons/turf/walls.dmi', loc = T, icon_state = M.scan_state, layer = 18)
-				C.images += I
-				spawn(30)
-					if(C)
-						C.images -= I
+		if(L.len)
+			for(var/mob/user in mobs)
+				if(user.client)
+					var/client/C = user.client
+					for(M in L)
+						var/turf/T = get_turf(M)
+						var/image/I = image('icons/turf/walls.dmi', loc = T, icon_state = M.scan_state, layer = 18)
+						C.images += I
+						spawn(30)
+							if(C)
+								C.images -= I
 
 //Debug item to identify all ore spread quickly
-/obj/item/device/mining_scanner/admin
+/obj/item/device/t_scanner/mining_scanner/admin
 
-/obj/item/device/mining_scanner/admin/attack_self(mob/user)
+/obj/item/device/t_scanner/mining_scanner/admin/attack_self(mob/user)
 	for(var/turf/simulated/mineral/M in world)
 		if(M.scan_state)
 			M.icon_state = M.scan_state

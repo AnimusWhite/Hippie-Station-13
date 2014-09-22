@@ -250,7 +250,7 @@
 		return 0
 	if(!job.player_old_enough(src.client))
 		return 0
-	if(config.enforce_human_authority && ((rank in command_positions) || (rank in security_positions)) && client.prefs.pref_species.id != "human")
+	if(config.enforce_human_authority && (rank in command_positions) && client.prefs.pref_species.id != "human")
 		return 0
 	return 1
 
@@ -359,7 +359,7 @@
 	ready_dna(new_character, client.prefs.blood_type)
 
 	new_character.key = key		//Manually transfer the key to log them in
-	new_character.unlock_achievement("The Start of Something")
+
 	return new_character
 
 
