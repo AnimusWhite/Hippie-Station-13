@@ -82,7 +82,6 @@ var/list/admin_verbs_fun = list(
 	/client/proc/make_sound,
 	/client/proc/toggle_random_events,
 	/client/proc/set_ooc,
-	/client/proc/cmd_smite,
 	/client/proc/forceEvent
 	)
 var/list/admin_verbs_spawn = list(

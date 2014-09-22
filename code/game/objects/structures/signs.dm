@@ -122,6 +122,13 @@
 /obj/structure/sign/maltesefalcon/right
 	icon_state = "maltesefalcon-right"
 
+/obj/structure/sign/freddy/left
+	icon_state = "fredleft"
+	desc = "Wow, electronic entertainment -and- pizza? You feel like you must've died and gone to heaven!"
+/obj/structure/sign/freddy/right
+	icon_state = "fredright"
+	desc = "Wow, electronic entertainment -and- pizza? You feel like you must've died and gone to heaven!"
+
 /obj/structure/sign/science			//These 3 have multiple types, just var-edit the icon_state to whatever one you want on the map
 	name = "\improper SCIENCE!"
 	desc = "A warning sign which reads 'SCIENCE!'"

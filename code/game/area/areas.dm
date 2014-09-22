@@ -199,30 +199,120 @@
 		src.party = 0
 		src.mouse_opacity = 0
 		src.updateicon()
-		for(var/obj/machinery/door/firedoor/D in src)
-			if(!D.blocked)
-				if(D.operating)
-					D.nextstate = OPEN
-				else if(D.density)
-					spawn(0)
-					D.open()
+	return
+
+/area/proc/alertalert() //idk but it fits with the rest
+	if(src.name == "Space") //no doing shit in space
+		return
+	if (!( src.alert ))
+		src.alert = 1
+		src.updateicon()
+		src.mouse_opacity = 0
+	return
+
+/area/proc/alertreset()
+	if (src.alert)
+		src.alert = 0
+		src.mouse_opacity = 0
+		src.updateicon()
+	return
+
+/area/proc/dangalert() //idk but it fits with the rest
+	if(src.name == "Space") //no doing shit in space
+		return
+	if (!( src.danger ))
+		src.danger = 1
+		src.updateicon()
+		src.mouse_opacity = 0
+	return
+
+/area/proc/dangreset()
+	if (src.danger)
+		src.danger = 0
+		src.mouse_opacity = 0
+		src.updateicon()
+	return
+
+/area/proc/warnalert() //idk but it fits with the rest
+	if(src.name == "Space") //no doing shit in space
+		return
+	if (!( src.warn ))
+		src.warn = 1
+		src.updateicon()
+		src.mouse_opacity = 0
+	return
+
+/area/proc/warnreset()
+	if (src.warn)
+		src.warn = 0
+		src.mouse_opacity = 0
+		src.updateicon()
+	return
+
+/area/proc/cautionalert() //idk but it fits with the rest
+	if(src.name == "Space") //no doing shit in space
+		return
+	if (!( src.caution ))
+		src.caution = 1
+		src.updateicon()
+		src.mouse_opacity = 0
+	return
+
+/area/proc/cautionreset()
+	if (src.caution)
+		src.caution = 0
+		src.mouse_opacity = 0
+		src.updateicon()
+	return
+
+/area/proc/redglow() //that's what it is
+//	if(src.name == "Space") //this is for like radiation and shit so let's let it be seen everywhere
+//		return
+	if (!( src.rads ))
+		src.rads = 1
+		src.updateicon()
+		src.mouse_opacity = 0
+	return
+
+/area/proc/redglowreset()
+	if (src.rads)
+		src.rads = 0
+		src.mouse_opacity = 0
+		src.updateicon()
 	return
 
 /area/proc/updateicon()
-	if ((fire || eject || party) && (!requires_power||power_environ) && !lighting_space)//If it doesn't require power, can still activate this proc.
-		if(fire && !eject && !party)
-			icon_state = "blue"
+	if ((fire || eject || party || alert || danger) && (!requires_power||power_environ) && !lighting_space)//If it doesn't require power, can still activate this proc.
+		if(fire && !eject && !party && !alert && !danger && !rads && !caution && !warn)
+			icon_state = "blue" //why this is not fire I have no idea
 		/*else if(atmosalm && !fire && !eject && !party)
 			icon_state = "bluenew"*/
-		else if(!fire && eject && !party)
-			icon_state = "red"
-		else if(party && !fire && !eject)
+		else if(!fire && eject && !party && !alert && !danger && !rads && !caution && !warn)
+			icon_state = "radiation"
+		else if(party && !fire && !eject && !alert && !danger && !rads && !caution && !warn)
 			icon_state = "party"
+		else if(alert && !party && !fire && !eject && !danger && !rads && !caution && !warn)
+			icon_state = "alert_OHSHIT"
+		else if(danger && !alert && !party && !fire && !eject && !rads && !caution && !warn)
+			icon_state = "alert_danger"
+		else if(rads && !danger && !alert && !party && !fire && !eject && !caution && !warn)
+			icon_state = "radiation"
+		else if(!rads && !danger && !alert && !party && !fire && !eject && caution && !warn)
+			icon_state = "alert_caution"
+		else if(!rads && !danger && !alert && !party && !fire && !eject && !caution && warn)
+			icon_state = "alert_warning"
+		/*else if(!party && !fire && !eject && caution && !warning && !danger && !ohshit && !rainbow)
+			icon_state = "alert_caution"
+		else if(!party && !fire && !eject && !caution && warning && !danger && !ohshit && !rainbow)
+			icon_state = "alert_warning"
+		else if(!party && !fire && !eject && !caution && !warning && danger && !ohshit && !rainbow)
+			icon_state = "alert_danger"
+		else if(!party && !fire && !eject && !caution && !warning && !danger && ohshit && !rainbow)
+			icon_state = "alert_OHSHIT"
+		else if(!party && !fire && !eject && !caution && !warning && !danger && !ohshit && rainbow)
+			icon_state = "alert_rainbow" */
 		else
-			icon_state = "blue-red"
-	else
-	//	new lighting behaviour with obj lights
-		icon_state = null
+			icon_state = "alert_rainbow"
 
 
 /*

@@ -46,9 +46,6 @@
 	consume(user)
 	return 1
 
-/obj/machinery/singularity/examine()
-	mezzer()
-	..()
 
 /obj/machinery/singularity/blob_act(severity)
 	return
@@ -292,8 +289,6 @@
 				qdel(A)
 		gain = 2
 	else if(isturf(A))
-		if(current_size < 5) //this is a fine size to start eating turfs
-			return
 		var/turf/T = A
 		if(T.intact)
 			for(var/obj/O in T.contents)

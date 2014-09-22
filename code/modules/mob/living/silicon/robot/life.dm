@@ -293,7 +293,7 @@
 		fire_stacks = max(0, fire_stacks)
 	else
 		ExtinguishMob()
-	
+
 	//adjustFireLoss(3)
 	return
 
