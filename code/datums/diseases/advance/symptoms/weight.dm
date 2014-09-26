@@ -23,7 +23,6 @@ Bonus
 	stage_speed = -2
 	transmittable = -2
 	level = 4
-	severity = 1
 
 /datum/symptom/weight_gain/Activate(var/datum/disease/advance/A)
 	..()
@@ -65,7 +64,6 @@ Bonus
 	stage_speed = -2
 	transmittable = -2
 	level = 3
-	severity = 1
 
 /datum/symptom/weight_loss/Activate(var/datum/disease/advance/A)
 	..()

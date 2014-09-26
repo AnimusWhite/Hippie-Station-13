@@ -8,7 +8,7 @@
 	var/temp_msg = "Telescience control console initialized.<BR>Welcome."
 
 	// VARIABLES //
-	var/teles_left	// How many teleports left until it becomes uncalibrated
+	var/teles_left = 0	// How many teleports left until it becomes uncalibrated
 	var/datum/projectile_data/last_tele_data = null
 	var/z_co = 1
 	var/power_off
@@ -157,9 +157,131 @@
 	else
 		return
 
+// Shake everyone on the z level to let them know that telescience has FUUUUUCKED UP
+/obj/machinery/computer/telescience/proc/shake_everyone()
+	var/turf/our_turf = get_turf(src)
+	for(var/mob/M in mob_list)
+		var/turf/their_turf = get_turf(M)
+		if(their_turf.z == our_turf.z)
+			if(M.client)
+				shake_camera(M, 15, 1) //obligatory BOOM BOOM SHAKE THE ROOM
+				return
+
+
 /obj/machinery/computer/telescience/proc/telefail()
 	sparks()
 	visible_message("<span class='warning'>The telepad weakly fizzles.</span>")
+
+	if(prob(25))
+		// light irradiation
+		for(var/mob/living/M in range(rand(6,10),src))
+			M.apply_effect((rand(25, 120)), IRRADIATE, 0)
+			M << "\red You feel a warm sensation."
+		return
+	if(prob(10))
+		//war never changes
+		for(var/mob/living/M in range(rand(11,40),src))
+			M.apply_effect((rand(120, 500)), IRRADIATE, 0)
+			M << "\red You feel a wave of heat wash over you."
+
+	/*if(prob(1))
+		// AI CALL SHUTTLE I SAW RUNE, SUPER LOW CHANCE, CAN HARDLY HAPPEN
+		for(var/mob/living/carbon/O in viewers(src, null))
+			var/datum/game_mode/cult/temp = new
+			O.show_message("\red The telepad flashes with a strange light, and you have a sudden surge of allegiance toward the true dark one!", 2)
+			O.mind.make_Cultist()
+			temp.grant_runeword(O)
+			sparks()
+		return
+	if(prob(1))
+		// VIVA LA FUCKING REVOLUTION BITCHES, SUPER LOW CHANCE, CAN HARDLY HAPPEN
+		for(var/mob/living/carbon/O in viewers(src, null))
+			O.show_message("\red The telepad flashes with a strange light, and you see all kind of images flash through your mind, of murderous things Nanotrasen has done, and you decide to rebel!", 2)
+			O.mind.make_Rev()
+			sparks()
+		return*/
+
+	if(prob(8))
+		// meteors because frrrak you
+		for(var/mob/living/carbon/O in viewers(src, null))
+			shake_everyone()
+			priority_announce("Unexpected bluespace anomaly detected at [station_name()]. No further information is avalible at this time.", "Telescience Anomaly")
+			spawn_meteors(pick((rand(1,10)),(rand(1,30)),(rand(1,50))), pick("meteorsA","meteorsB","meteorsC"))
+			sparks()
+		return
+	if(prob(15))
+		//haha i was only pretending to be retarded
+		for(var/mob/living/carbon/O in viewers(src, null))
+			shake_everyone()
+			priority_announce("Unexpected bluespace anomaly detected at [station_name()]. No further information is avalible at this time.", "Telescience Anomaly")
+			sparks()
+		return
+	if(prob(20))
+		// i am not removing this
+		for(var/mob/living/M in range(rand(6,30),src))
+			M << sound('sound/items/AirHorn.ogg')
+			if(istype(M, /mob/living/carbon/human))
+				var/mob/living/carbon/human/H = M
+				if(istype(H.ears, /obj/item/clothing/ears/earmuffs))
+					continue
+			M << "<font color='red' size='7'>HONK</font>"
+			M.sleeping = 0
+			M.stuttering += 40
+			M.ear_deaf += 50
+			M.Weaken(5)
+			if(prob(30))
+				M.Stun(30)
+				M.Paralyse(10)
+			else
+				M.Jitter(500)
+			sparks()
+		return
+	if(prob(15))
+		// ASS BLAST USA
+		for(var/mob/living/carbon/M in range(rand(20,45),src))
+			playsound(src.loc, 'sound/misc/fartmassive.ogg', 60, 1, 5)
+			M.emote("scream")
+			var/obj/item/clothing/head/butt/B = null
+			B = locate() in M.internal_organs
+			if(B)
+				new /obj/item/clothing/head/butt(M.loc)
+				M.internal_organs -= B
+				M.apply_damage(9,"brute","chest")
+				M << "\red Holy shit, a bluespace portal tears your butt off!"
+			if(!B)
+				return
+			return
+	if(prob(5))
+		// the station loses it's shit
+		for(var/mob/living/carbon/M in range(rand(80,200),src))
+			playsound(src.loc, 'sound/misc/fartmassive.ogg', 80, 1, 5)
+			var/obj/item/clothing/head/butt/B = null
+			B = locate() in M.internal_organs
+			if(B)
+				new /obj/item/clothing/head/butt(M.loc)
+				M.internal_organs -= B
+				M << "\red Holy shit, a bluespace portal relocates your butt!"
+				new /obj/item/clothing/head/butt(M.loc = ((M.x + rand(-20,20)) + (M.y + rand(-20,20))))
+			if(!B)
+				return
+			return
+	if(prob(35))
+		// They did the mash! (They did the monster mash!) The monster mash! (It was a graveyard smash!)
+		sparks()
+		var/L = get_turf(E)
+		var/blocked = list(/mob/living/simple_animal/hostile,
+			/mob/living/simple_animal/hostile/alien/queen/large,
+			/mob/living/simple_animal/hostile/retaliate,
+			/mob/living/simple_animal/hostile/retaliate/clown,
+			/mob/living/simple_animal/hostile/giant_spider/nurse) // Makes sure certain monsters don't spawn, add your monster to the list if you don't want it to spawn here.
+		var/list/hostiles = typesof(/mob/living/simple_animal/hostile) - blocked
+		playsound(L, 'sound/effects/phasein.ogg', 100, 1)
+		for(var/mob/living/carbon/human/M in viewers(L, null))
+			flick("e_flash", M.flash)
+		var/chosen = pick(hostiles)
+		var/mob/living/simple_animal/hostile/H = new chosen
+		H.loc = L
+		return
 	return
 
 /obj/machinery/computer/telescience/proc/doteleport(mob/user)
@@ -214,7 +336,7 @@
 			s.start()
 
 			temp_msg = "Teleport successful.<BR>"
-			if(teles_left < 10)
+			if(teles_left < 3)
 				temp_msg += "<BR>Calibration required soon."
 			else
 				temp_msg += "Data printed below."
@@ -280,6 +402,13 @@
 			updateDialog()
 
 /obj/machinery/computer/telescience/proc/teleport(mob/user)
+
+	var/datum/projectile_data/proj_data = projectile_trajectory(telepad.x, telepad.y)
+	last_tele_data = proj_data
+
+	var/trueX = Clamp(round(proj_data.dest_x, 1), 1, world.maxx)
+	var/trueY = Clamp(round(proj_data.dest_y, 1), 1, world.maxy)
+
 	if(rotation == null || angle == null || z_co == null)
 		temp_msg = "ERROR!<BR>Set a angle, rotation and sector."
 		return
@@ -291,16 +420,20 @@
 		telefail()
 		temp_msg = "ERROR!<BR>Elevation is less than 1 or greater than 90."
 		return
-	if(z_co == 2 || z_co < 1 || z_co > 6)
-		telefail()
-		temp_msg = "ERROR! Sector is less than 1, <BR>greater than 6, or equal to 2."
-		return
-	if(teles_left > 0)
-		doteleport(user)
-	else
-		telefail()
-		temp_msg = "ERROR!<BR>Calibration required."
-		return
+	for(var/obj/effect/landmark/L in landmarks_list)
+		if (L.name == "awaystart")
+			if((z_co == L.z && trueX == L.x && trueY == L.y) && (teles_left > 0))
+				doteleport(user)
+			else if(z_co == 2 || z_co < 1 || z_co >= 18) //HAHA THIS IS HOW YOU DO IT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				telefail()
+				temp_msg = "ERROR! Sector is less than 1, <BR>or equal to 2."
+				return
+			else if(teles_left > 0)
+				doteleport(user)
+			else
+				telefail()
+				temp_msg = "ERROR!<BR>Calibration required."
+				return
 	return
 
 /obj/machinery/computer/telescience/proc/eject()
@@ -342,7 +475,7 @@
 		var/new_z = input("Please input desired sector.", name, z_co) as num
 		if(..())
 			return
-		z_co = Clamp(round(new_z), 1, 10)
+		z_co = Clamp(round(new_z), 1, 99999999)
 
 	if(href_list["ejectGPS"])
 		inserted_gps.loc = loc
@@ -375,7 +508,7 @@
 	updateDialog()
 
 /obj/machinery/computer/telescience/proc/recalibrate()
-	teles_left = rand(30, 40)
+	teles_left = rand(8, 50)
 	//angle_off = rand(-25, 25)
 	power_off = rand(-4, 0)
 	rotation_off = rand(-10, 10)

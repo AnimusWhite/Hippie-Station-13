@@ -412,24 +412,44 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	feedback_add_details("admin_verb","REJU") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/cmd_admin_create_centcom_report()
-	set category = "Special Verbs"
+	set category = "Badmin"
 	set name = "Create Command Report"
+	set desc = "Create a message from Centcom, choose whether it's classified or not."
 	if(!holder)
-		src << "Only administrators may use this command."
+		src << "yo what the fuck is wrong with you"
 		return
-	var/input = input(usr, "Please enter anything you want. Anything. Serious.", "What?", "") as message|null
-	if(!input)
+	var/inputtitle = input(usr, "choose what the title of this report is: if it's classified it will not be mentioned in the announcement but will be on the paper as Classified 'whatever'", "helo i am menu how can i help u 2day", "[command_name()] Update") as message|null
+	if(!inputtitle)
+		src << "you failed to input a title!"
+		return
+	var/inputmain = input(usr, "enter anything you fucking want", "um excuse me my eyes are up here", "[ckey] is a badmin plz deadmin") as message|null
+	if(!inputmain)
+		src << "there's nothing in the body to send!"
 		return
 
-	var/confirm = alert(src, "Do you want to announce the contents of the report to the crew?", "Announce", "Yes", "No")
-	if(confirm == "Yes")
-		priority_announce(input, null, 'sound/AI/commandreport.ogg')
+	var/confirm = alert(src, "is this a classified message", "can you not read or something", "Yes", "No")
+	if(confirm == "No")
+		priority_announce(inputmain, inputtitle, 'sound/AI/commandreport.ogg');
+		for (var/obj/machinery/computer/communications/C in machines)
+			if(! (C.stat & (BROKEN|NOPOWER) ) )
+				var/obj/item/weapon/paper/P = new /obj/item/weapon/paper( C.loc )
+				P.name = "paper- '[inputtitle]'"
+				P.info = inputmain
+				C.messagetitle.Add(inputtitle)
+				C.messagetext.Add(P.info)
+	else if(confirm == "Yes")
+		priority_announce("A report has been downloaded and printed out at all communications consoles.", "Incoming Classified Message", 'sound/AI/commandreport.ogg');
+		for (var/obj/machinery/computer/communications/C in machines)
+			if(! (C.stat & (BROKEN|NOPOWER) ) )
+				var/obj/item/weapon/paper/P = new /obj/item/weapon/paper( C.loc )
+				P.name = "paper- 'Classified [inputtitle]'"
+				P.info = inputmain
+				C.messagetitle.Add("Classified [inputtitle]")
+				C.messagetext.Add(P.info)
 	else
-		priority_announce("A report has been downloaded and printed out at all communications consoles.", "Incoming Classified Message", 'sound/AI/commandreport.ogg')
+		src << "you blew it"
 
-	print_command_report(input,"[confirm=="Yes" ? "" : "Classified "][command_name()] Update")
-
-	log_admin("[key_name(src)] has created a command report: [input]")
+	log_admin("[key_name(src)] has created a command report: [inputtitle], [inputmain]")
 	message_admins("[key_name_admin(src)] has created a command report", 1)
 	feedback_add_details("admin_verb","CCR") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -690,6 +710,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 			return
 
 	emergency_shuttle.incall()
+	priority_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.", null, 'sound/AI/shuttlecalled.ogg', "Priority")
 	feedback_add_details("admin_verb","CSHUT") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(usr)] admin-called the emergency shuttle.")
 	message_admins("<span class='adminnotice'>[key_name_admin(usr)] admin-called the emergency shuttle.</span>", 1)

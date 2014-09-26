@@ -17,15 +17,6 @@
 	prefs.save_preferences()
 	feedback_add_details("admin_verb","TGS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-/client/verb/toggle_ghost_whispers()
-	set name = "Show/Hide GhostWhispers"
-	set category = "Preferences"
-	set desc = ".Toggle between hearing all whispers, and only whispers of nearby mobs"
-	prefs.toggles ^= CHAT_GHOSTWHISPER
-	src << "As a ghost, you will now [(prefs.toggles & CHAT_GHOSTWHISPER) ? "see all whispers in the world" : "only see whispers from nearby mobs"]."
-	prefs.save_preferences()
-	feedback_add_details("admin_verb","TGW") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
 /client/proc/toggle_hear_radio()
 	set name = "Show/Hide RadioChatter"
 	set category = "Preferences"
@@ -153,7 +144,7 @@
 var/list/ghost_forms = list("ghost","ghostking","ghostian2","ghost_red","ghost_black", \
 							"ghost_blue","ghost_yellow","ghost_green","ghost_pink", \
 							"ghost_cyan","ghost_dblue","ghost_dred","ghost_dgreen", \
-							"ghost_dcyan","ghost_grey","ghost_dyellow","ghost_dpink")
+							"ghost_dcyan","ghost_grey","ghost_dyellow","ghost_dpink","ghost_rainbow","ghost_singulo")
 /client/verb/pick_form()
 	set name = "Choose Ghost Form"
 	set category = "Preferences"

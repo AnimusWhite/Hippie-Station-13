@@ -8,7 +8,7 @@
 	agent = "ICE9-rhinovirus"
 	affected_species = list("Human")
 	desc = "If left untreated the subject will slow, as if partly frozen."
-	severity = "Medium"
+	severity = "Moderate"
 
 /datum/disease/cold9/stage_act()
 	..()

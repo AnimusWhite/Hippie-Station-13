@@ -24,7 +24,6 @@ Bonus
 	stage_speed = 0
 	transmittable = 4
 	level = 1
-	severity = 1
 
 /datum/symptom/sneeze/Activate(var/datum/disease/advance/A)
 	..()

@@ -156,11 +156,7 @@
 	add_fingerprint(M)
 	if(on)
 		for (var/atom/movable/G in loc)
-			wash(G)
-	else
-		if(istype(loc, /turf/simulated))
-			var/turf/simulated/tile = loc
-			tile.MakeSlippery()
+			Crossed(G)
 
 
 /obj/machinery/shower/attackby(obj/item/I, mob/user)
@@ -210,10 +206,9 @@
 /obj/machinery/shower/Crossed(atom/movable/O)
 	..()
 	wash(O)
-	if(iscarbon(O) && on)
-		var/mob/living/carbon/M=O
-		M.slip(4,2,null,NO_SLIP_WHEN_WALKING)
-
+	if(ismob(O))
+		mobpresent += 1
+		check_heat(O)
 
 
 /obj/machinery/shower/Uncrossed(atom/movable/O)
@@ -225,9 +220,7 @@
 //Yes, showers are super powerful as far as washing goes.
 /obj/machinery/shower/proc/wash(atom/movable/O)
 	if(!on) return
-	if(ismob(O))
-		mobpresent += 1
-		check_heat(O)
+
 	if(isliving(O))
 		var/mob/living/L = O
 		L.ExtinguishMob()
@@ -311,7 +304,6 @@
 	if(!on || !mobpresent) return
 	for(var/mob/living/carbon/C in loc)
 		check_heat(C)
-
 
 
 /obj/machinery/shower/proc/check_heat(mob/M)

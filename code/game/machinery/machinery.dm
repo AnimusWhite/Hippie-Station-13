@@ -264,7 +264,9 @@ Class Procs:
 		return 1
 	if(user.lying || user.stat)
 		return 1
-	if(!user.IsAdvancedToolUser())
+	if ( ! (istype(usr, /mob/living/carbon/human) || \
+			istype(usr, /mob/living/silicon) || \
+			istype(usr, /mob/living/carbon/monkey)) )
 		usr << "<span class='danger'>You don't have the dexterity to do this!</span>"
 		return 1
 /*
